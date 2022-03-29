@@ -1,0 +1,23 @@
+"""
+This entity contains all user-specific data displayed on the dapp, including all user actions
+"""
+type User @entity {
+  """
+  wallet address
+  """
+  id: ID!
+  """
+  Array of user owned land nfts
+  """
+  lands: [Land!] @derivedFrom(field: "user")
+  firstSeenAt: BigInt!
+  lastSeenAt: BigInt!
+}
+
+type Land @entity {
+  id: ID!
+  user: User!
+  x: BigInt!
+  y: BigInt!
+}
+

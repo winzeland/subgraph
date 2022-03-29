@@ -1,0 +1,27 @@
+{
+  "name": "kingdom-subgraph",
+  "version": "0.1",
+  "description": "Subgraph for Polygon Kingdom",
+  "main": "index.js",
+  "repository": "git@github.com:polygon-kingdom/subgraph.git",
+  "author": "Rytis Grincevičius <rytis.grincevicius@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "create": "graph create polygon-kingdom/subgraph --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create polygon-kingdom/subgraph --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy polygon-kingdom/subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy polygon-kingdom/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "dev": "yarn codegen && yarn deploy-local -- --version-label v0.0.1"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.25.3",
+    "@graphprotocol/graph-ts": "^0.24.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0"
+  }
+}

@@ -1,0 +1,27 @@
+specVersion: 0.0.3
+description: Polygon Kingdom
+repository: https://github.com/polygon-kingdom/subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: NFTs
+    network: matic
+    source:
+      address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+      abi: NFTLands
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Land
+      abis:
+        - name: NFTLands
+          file: ./abis/NFTLands.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        # - event: UpdatedGravatar(uint256,address,string,string)
+        #   handler: handleUpdatedGravatar
+      file: ./src/NFTs/NFTLands.ts
