@@ -1,5 +1,5 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { User } from '../../../generated/schema';
+import { User } from '../../generated/schema';
 
 export function createAndReturnUser(address: Address): User {
   let user = User.load(address.toHex());

@@ -1,24 +1,29 @@
 {
-  "name": "kingdom-subgraph",
+  "name": "winzeland-subgraph",
   "version": "0.1",
-  "description": "Subgraph for Polygon Kingdom",
+  "description": "Subgraph for Winzeland",
   "main": "index.js",
-  "repository": "git@github.com:polygon-kingdom/subgraph.git",
+  "repository": "git@github.com:winzeland/subgraph.git",
   "author": "Rytis Grincevičius <rytis.grincevicius@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "create": "graph create polygon-kingdom/subgraph --node https://api.thegraph.com/deploy/",
-    "create-local": "graph create polygon-kingdom/subgraph --node http://127.0.0.1:8020",
+    "create": "graph create winzeland/subgraph --node https://api.thegraph.com/deploy/",
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy polygon-kingdom/subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local": "graph deploy polygon-kingdom/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "dev": "yarn codegen && yarn deploy-local -- --version-label v0.0.1"
+    "prepare:mainnet": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml && mustache config/mainnet.json src/network.template.ts > src/network.ts",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && mustache config/mumbai.json src/network.template.ts > src/network.ts",
+    "prepare:local": "mustache config/local.json subgraph.template.yaml > subgraph.yaml && mustache config/local.json src/network.template.ts > src/network.ts",
+    "deploy": "graph deploy winzeland/subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create winzeland/subgraph --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy winzeland/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "remove-local": "graph remove --node http://localhost:8020/ maticnetwork/mumbai-root-subgraphs",
+    "dev": "yarn prepare:local && yarn codegen && yarn deploy-local -- --version-label v0.0.1"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.25.3",
-    "@graphprotocol/graph-ts": "^0.24.1"
+    "@graphprotocol/graph-ts": "^0.24.1",
+    "mustache": "^4.2.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

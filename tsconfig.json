@@ -1,0 +1,9 @@
+{
+  "extends": "@graphprotocol/graph-ts",
+  "compilerOptions": {
+      "baseUrl": "./src",
+      "paths": {
+          "generated/*": ["../generated"]
+      }
+  }
+}

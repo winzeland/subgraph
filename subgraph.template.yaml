@@ -1,27 +1,45 @@
 specVersion: 0.0.3
-description: Polygon Kingdom
-repository: https://github.com/polygon-kingdom/subgraph
+description: Winzeland
+repository: https://github.com/winzeland/subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NFTs
-    network: matic
+    name: Gubbins
+    network: {{ network }}
     source:
-      address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
-      abi: NFTLands
+      address: '{{ contracts.GubbinsERC20.address}}'
+      abi: Gubbins
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Land
+        - Gubbins
       abis:
-        - name: NFTLands
-          file: ./abis/NFTLands.json
+        - name: Gubbins
+          file: ./abis/GubbinsERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/gubbins-mappings.ts
+
+  - kind: ethereum/contract
+    name: Winzer
+    network: {{ network }}
+    source:
+      address: '{{ contracts.WinzerERC721.address }}'
+      abi: Winzer
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Winzer
+      abis:
+        - name: Winzer
+          file: ./abis/WinzerERC721.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        # - event: UpdatedGravatar(uint256,address,string,string)
-        #   handler: handleUpdatedGravatar
-      file: ./src/NFTs/NFTLands.ts
+      file: ./src/NFTs/winzer-mappings.ts

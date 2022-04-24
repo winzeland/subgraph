@@ -1,0 +1,8 @@
+{
+  "network": "mumbai",
+  "contracts": {
+    "WinzerERC721": {
+      "address": ""
+    }
+  }
+}

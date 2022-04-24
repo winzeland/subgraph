@@ -7,11 +7,17 @@ type User @entity {
   """
   id: ID!
   """
+  wallet address
+  """
+  gubbins: BigInt!
+  """
   Array of user owned land nfts
   """
   lands: [Land!] @derivedFrom(field: "user")
-  firstSeenAt: BigInt!
-  lastSeenAt: BigInt!
+  """
+  Array of user owned winzer nfts
+  """
+  winzers: [Winzer!] @derivedFrom(field: "user")
 }
 
 type Land @entity {
@@ -21,3 +27,7 @@ type Land @entity {
   y: BigInt!
 }
 
+type Winzer @entity {
+  id: ID!
+  user: User!
+}

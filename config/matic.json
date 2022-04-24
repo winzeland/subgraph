@@ -1,0 +1,8 @@
+{
+  "network": "matic",
+  "contracts": {
+    "WinzerERC721": {
+      "address": ""
+    }
+  }
+}
