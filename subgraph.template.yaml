@@ -4,42 +4,90 @@ repository: https://github.com/winzeland/subgraph
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum/contract
-    name: Gubbins
-    network: {{ network }}
-    source:
-      address: '{{ contracts.GubbinsERC20.address}}'
-      abi: Gubbins
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - Gubbins
-      abis:
-        - name: Gubbins
-          file: ./abis/GubbinsERC20.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src/gubbins-mappings.ts
+  # - kind: ethereum/contract
+  #   name: Gubbins
+  #   network: {{ network }}
+  #   source:
+  #     address: '{{ contracts.GubbinsERC20.address }}'
+  #     abi: Gubbins
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Gubbins
+  #     abis:
+  #       - name: Gubbins
+  #         file: ./abis/GubbinsERC20.json
+  #     eventHandlers:
+  #       - event: Transfer(indexed address,indexed address,uint256)
+  #         handler: handleTransfer
+  #     file: ./src/gubbins-mappings.ts
+
+  # - kind: ethereum/contract
+  #   name: Winzer
+  #   network: {{ network }}
+  #   source:
+  #     address: '{{ contracts.WinzerERC721.address }}'
+  #     abi: Winzer
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Winzer
+  #     abis:
+  #       - name: Winzer
+  #         file: ./abis/WinzerERC721.json
+  #     eventHandlers:
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer
+  #     file: ./src/NFTs/winzer-mappings.ts
 
   - kind: ethereum/contract
-    name: Winzer
+    name: IERC20
     network: {{ network }}
     source:
-      address: '{{ contracts.WinzerERC721.address }}'
-      abi: Winzer
+      address: '{{ contracts.GubbinsERC20.address }}'
+      abi: IERC20
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Winzer
+        - ERC20Contract
       abis:
-        - name: Winzer
-          file: ./abis/WinzerERC721.json
+        - name: IERC20
+          file: ./node_modules/@openzeppelin/contracts/build/contracts/IERC20Metadata.json
       eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
+        # - event: Approval(indexed address,indexed address,uint256)
+        #   handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      file: ./src/NFTs/winzer-mappings.ts
+      file: ./src/datasources/erc20.ts
+
+  - kind: ethereum/contract
+    name: ERC1155
+    network: {{ network }}
+    source:
+      address: "{{ contracts.GubbinsERC20.address }}"
+      abi: IERC1155
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ERC1155Contract
+      abis:
+        - name: IERC1155
+          file: ./node_modules/@openzeppelin/contracts/build/contracts/IERC1155MetadataURI.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+      file: ./src/datasources/erc1155.ts

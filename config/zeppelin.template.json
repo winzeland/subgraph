@@ -1,0 +1,7 @@
+{
+    "output": "generated/zeppelin",
+    "chain": "{{network}}",
+    "datasources": [
+      { "address": "{{contracts.GubbinsERC20.address}}", "startBlock": "{{contracts.GubbinsERC20.startBlock}}", "module": [ "erc20",    "accesscontrol" ] }
+    ]
+}

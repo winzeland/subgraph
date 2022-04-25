@@ -1,12 +1,12 @@
 import { Transfer } from '../generated/Gubbins/Gubbins';
-import { createAndReturnUser } from './utils/user-utils';
+import { fetchAccount } from './fetch/account';
 
 export function handleTransfer(event: Transfer): void {
-  const sender = createAndReturnUser(event.params.from);
+  const sender = fetchAccount(event.params.from);
   sender.gubbins = sender.gubbins.minus(event.params.value);
   sender.save();
 
-  const receiver = createAndReturnUser(event.params.to);
+  const receiver = fetchAccount(event.params.to);
   receiver.gubbins = receiver.gubbins.plus(event.params.value);
   receiver.save();
 }
