@@ -1,0 +1,8 @@
+{
+  "network": "rinkeby",
+  "contracts": {
+    "WinzerERC721": {
+      "address": ""
+    }
+  }
+}

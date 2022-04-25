@@ -3,9 +3,9 @@ This entity contains all user-specific data displayed on the dapp, including all
 """
 type Account @entity {
   id: ID!
-  gubbins: BigInt!
-  lands: [Land!] @derivedFrom(field: "account")
-  winzers: [Winzer!] @derivedFrom(field: "account")
+  # gubbins: BigInt!
+  # lands: [Land!] @derivedFrom(field: "account")
+  # winzers: [Winzer!] @derivedFrom(field: "account")
 
   asERC20: ERC20Contract
 	ERC20balances: [ERC20Balance!]! @derivedFrom(field: "account")
