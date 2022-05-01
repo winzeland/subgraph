@@ -1,32 +1,28 @@
 import {
-	ERC721Transfer,
+	events,
+	transactions,
+} from '@amxx/graphprotocol-utils'
+
+import {
+	WinzerTransfer,
 } from '../../generated/schema'
 
 import {
 	Approval       as ApprovalEvent,
 	ApprovalForAll as ApprovalForAllEvent,
 	Transfer       as TransferEvent,
-} from '../../generated/erc721/IERC721'
-
-import {
-	events,
-	transactions,
-} from '@amxx/graphprotocol-utils'
+} from '../../generated/Winzer/Winzer'
 
 import {
 	fetchAccount,
 } from '../fetch/account'
 
-import {
-	fetchERC721,
-	fetchERC721Token,
-	fetchERC721Operator,
-} from '../fetch/erc721'
+import { fetchWinzer, fetchWinzerOperator, fetchWinzerToken } from '../fetch/winzer'
 
 export function handleTransfer(event: TransferEvent): void {
-	let contract = fetchERC721(event.address)
+	let contract = fetchWinzer(event.address)
 	if (contract != null) {
-		let token = fetchERC721Token(contract, event.params.tokenId)
+		let token = fetchWinzerToken(contract, event.params.tokenId)
 		let from  = fetchAccount(event.params.from)
 		let to    = fetchAccount(event.params.to)
 
@@ -35,7 +31,7 @@ export function handleTransfer(event: TransferEvent): void {
 		contract.save()
 		token.save()
 
-		let ev         = new ERC721Transfer(events.id(event))
+		let ev         = new WinzerTransfer(events.id(event))
 		ev.emitter     = contract.id
 		ev.transaction = transactions.log(event).id
 		ev.timestamp   = event.block.timestamp
@@ -48,9 +44,9 @@ export function handleTransfer(event: TransferEvent): void {
 }
 
 export function handleApproval(event: ApprovalEvent): void {
-	let contract = fetchERC721(event.address)
+	let contract = fetchWinzer(event.address)
 	if (contract != null) {
-		let token    = fetchERC721Token(contract, event.params.tokenId)
+		let token    = fetchWinzerToken(contract, event.params.tokenId)
 		let owner    = fetchAccount(event.params.owner)
 		let approved = fetchAccount(event.params.approved)
 
@@ -73,11 +69,11 @@ export function handleApproval(event: ApprovalEvent): void {
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-	let contract = fetchERC721(event.address)
+	let contract = fetchWinzer(event.address)
 	if (contract != null) {
 		let owner      = fetchAccount(event.params.owner)
 		let operator   = fetchAccount(event.params.operator)
-		let delegation = fetchERC721Operator(contract, owner, operator)
+		let delegation = fetchWinzerOperator(contract, owner, operator)
 
 		delegation.approved = event.params.approved
 

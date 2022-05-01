@@ -6,6 +6,24 @@ type Account @entity {
 	gubbinsApprovalsSpender: [GubbinsApproval!]! @derivedFrom(field: "spender")
 	gubbinsTransferFromEvent: [GubbinsTransfer!]! @derivedFrom(field: "from")
 	gubbinsTransferToEvent: [GubbinsTransfer!]! @derivedFrom(field: "to")
+	asWinzer: WinzerContract
+	winzerTokens: [WinzerToken!]! @derivedFrom(field: "owner")
+	winzerOperatorOwner: [WinzerOperator!]! @derivedFrom(field: "owner")
+	winzerOperatorOperator: [WinzerOperator!]! @derivedFrom(field: "operator")
+	winzerTransferFromEvent: [WinzerTransfer!]! @derivedFrom(field: "from")
+	winzerTransferToEvent: [WinzerTransfer!]! @derivedFrom(field: "to")
+}
+
+type GubbinsContract @entity {
+	id: ID!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+	totalSupply: GubbinsBalance!
+	balances: [GubbinsBalance!]! @derivedFrom(field: "contract")
+	approvals: [GubbinsApproval!]! @derivedFrom(field: "contract")
+	transfers: [GubbinsTransfer!]! @derivedFrom(field: "contract")
 }
 
 type GubbinsBalance @entity {
@@ -42,17 +60,48 @@ type GubbinsApproval @entity {
 	valueExact: BigInt!
 }
 
-type GubbinsContract @entity {
+type WinzerContract @entity {
 	id: ID!
 	asAccount: Account!
+	supportsMetadata: Boolean
 	name: String
 	symbol: String
-	decimals: Int!
-	totalSupply: GubbinsBalance!
-	balances: [GubbinsBalance!]! @derivedFrom(field: "contract")
-	approvals: [GubbinsApproval!]! @derivedFrom(field: "contract")
-	transfers: [GubbinsTransfer!]! @derivedFrom(field: "contract")
+	tokens: [WinzerToken!]! @derivedFrom(field: "contract")
+	operators: [WinzerOperator!]! @derivedFrom(field: "contract")
+	transfers: [WinzerTransfer!]! @derivedFrom(field: "contract")
 }
+
+type WinzerToken @entity {
+	id: ID!
+	contract: WinzerContract!
+	identifier: BigInt!
+	owner: Account!
+	approval: Account!
+	uri: String
+	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
+}
+
+type WinzerOperator @entity {
+	id: ID!
+	contract: WinzerContract!
+	owner: Account!
+	operator: Account!
+	approved: Boolean!
+}
+
+type WinzerTransfer implements Event @entity {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: WinzerContract!
+	token: WinzerToken!
+	from: Account!
+	to: Account!
+}
+
+
+
 
 type ERC20Contract @entity {
 	id: ID!

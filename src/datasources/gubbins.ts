@@ -18,7 +18,7 @@ import {
 	fetchAccount,
 } from '../fetch/account'
 
-import { fetchGubbins, fetchGubbinsBalance } from '../fetch/gubbins'
+import { fetchGubbins, fetchGubbinsApproval, fetchGubbinsBalance } from '../fetch/gubbins'
 
 export function handleTransfer(event: TransferEvent): void {
 	let contract   = fetchGubbins(event.address)
@@ -69,7 +69,7 @@ export function handleApproval(event: ApprovalEvent): void {
 
 	let owner           = fetchAccount(event.params.owner)
 	let spender         = fetchAccount(event.params.spender)
-	let approval        = fetchERC20Approval(contract, owner, spender)
+	let approval        = fetchGubbinsApproval(contract, owner, spender)
 	approval.valueExact = event.params.value
 	approval.value      = decimals.toDecimals(event.params.value, contract.decimals)
 	approval.save()

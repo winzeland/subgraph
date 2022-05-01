@@ -28,6 +28,31 @@ dataSources:
           handler: handleTransfer
       file: ./src/datasources/gubbins.ts
 
+  - kind: ethereum/contract
+    name: winzer
+    network: {{network}}
+    source:
+      address: "{{contracts.WinzerERC721.address}}"
+      abi: Winzer
+      startBlock: {{contracts.WinzerERC721.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Winzer
+      abis:
+        - name: Winzer
+          file: ./abis/WinzerERC721.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/datasources/winzer.ts
+
   # - kind: ethereum/contract
   #   name: Winzer
   #   network: {{ network }}
