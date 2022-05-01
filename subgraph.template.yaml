@@ -51,6 +51,8 @@ dataSources:
           handler: handleApprovalForAll
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: DnaUpdated(indexed uint256,(uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8))
+          handler: handleDnaUpdate
       file: ./src/datasources/winzer.ts
 
   # - kind: ethereum/contract

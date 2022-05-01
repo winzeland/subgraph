@@ -10,6 +10,7 @@ import {
 import {
 	Approval       as ApprovalEvent,
 	ApprovalForAll as ApprovalForAllEvent,
+	DnaUpdated,
 	Transfer       as TransferEvent,
 } from '../../generated/Winzer/Winzer'
 
@@ -17,7 +18,7 @@ import {
 	fetchAccount,
 } from '../fetch/account'
 
-import { fetchWinzer, fetchWinzerOperator, fetchWinzerToken } from '../fetch/winzer'
+import { fetchWinzer, fetchWinzerDNA, fetchWinzerOperator, fetchWinzerToken } from '../fetch/winzer'
 
 export function handleTransfer(event: TransferEvent): void {
 	let contract = fetchWinzer(event.address)
@@ -41,6 +42,11 @@ export function handleTransfer(event: TransferEvent): void {
 		ev.to          = to.id
 		ev.save()
 	}
+}
+
+export function handleDnaUpdate(event: DnaUpdated): void {
+	const dna = fetchWinzerDNA(event.params._tokenId, event.params._dna);
+	dna.save();
 }
 
 export function handleApproval(event: ApprovalEvent): void {

@@ -78,7 +78,22 @@ type WinzerToken @entity {
 	owner: Account!
 	approval: Account!
 	uri: String
+	dna: WinzerDNA @derivedFrom(field: "token")
 	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
+}
+
+type WinzerDNA @entity {
+	id: ID!
+	token: WinzerToken!
+	race: Int!
+	sex: Int!
+	skill: Int!
+	hair: Int!
+	beard: Int!
+	skin: Int!
+	face: Int!
+	eyes: Int!
+	mouth: Int!
 }
 
 type WinzerOperator @entity {

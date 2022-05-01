@@ -15,12 +15,13 @@ import {
 	WinzerToken,
 	WinzerContract,
 	WinzerOperator,
+	WinzerDNA,
 } from '../../generated/schema'
 
 import {
 	fetchAccount
 } from './account'
-import { Winzer } from '../../generated/Winzer/Winzer'
+import { DnaUpdated_dnaStruct, DnaUpdated__Params, Winzer } from '../../generated/Winzer/Winzer'
 
 export function fetchWinzer(address: Address): WinzerContract | null {
 	let erc721           = Winzer.bind(address)
@@ -92,4 +93,27 @@ export function fetchWinzerOperator(contract: WinzerContract, owner: Account, op
 	}
 
 	return op as WinzerOperator
+}
+
+export function fetchWinzerDNA(identifier: BigInt, params: DnaUpdated_dnaStruct | null): WinzerDNA {
+	let id = identifier.toHex();
+	let dna = WinzerDNA.load(id)
+
+	if (dna == null) {
+		dna          = new WinzerDNA(id)
+		dna.token	 = id;
+		if (params) {
+			dna.race 	= params.race;
+			dna.sex 	= params.sex;
+			dna.skill 	= params.skill;
+			dna.hair 	= params.hair;
+			dna.beard 	= params.beard;
+			dna.skin 	= params.skin;
+			dna.face 	= params.face;
+			dna.eyes 	= params.eyes;
+			dna.mouth 	= params.mouth;
+		}
+	}
+
+	return dna as WinzerDNA;
 }
