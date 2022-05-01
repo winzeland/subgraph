@@ -2,6 +2,7 @@
     "output": "./generated/zeppelin.",
     "chain": "{{network}}",
     "datasources": [
-      { "address": "{{contracts.GubbinsERC20.address}}", "startBlock": "{{contracts.GubbinsERC20.startBlock}}", "module": [ "erc20",    "accesscontrol" ] }
+      { "address": "{{contracts.GubbinsERC20.address}}", "startBlock": "{{contracts.GubbinsERC20.startBlock}}", "module": [ "erc20",    "accesscontrol" ] },
+      { "address": "{{contracts.WinzerERC721.address}}", "startBlock": "{{contracts.WinzerERC721.startBlock}}", "module": [ "erc721",    "accesscontrol" ] }
     ]
 }
