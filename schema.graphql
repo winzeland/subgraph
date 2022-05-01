@@ -2,6 +2,10 @@ type Account @entity {
 	id: ID!
 	gubbins: GubbinsBalance @derivedFrom(field: "account")
 	asGubbins: GubbinsContract
+	gubbinsApprovalsOwner: [GubbinsApproval!]! @derivedFrom(field: "owner")
+	gubbinsApprovalsSpender: [GubbinsApproval!]! @derivedFrom(field: "spender")
+	gubbinsTransferFromEvent: [GubbinsTransfer!]! @derivedFrom(field: "from")
+	gubbinsTransferToEvent: [GubbinsTransfer!]! @derivedFrom(field: "to")
 }
 
 type GubbinsBalance @entity {
@@ -11,8 +15,8 @@ type GubbinsBalance @entity {
 	value: BigDecimal!
 	valueExact: BigInt!
 	decimals: BigInt!
-	transfersFrom: [GubbinsTransfer!]! @derivedFrom(field: "fromBalance")
-	transfersTo: [GubbinsTransfer!]! @derivedFrom(field: "toBalance")
+	transferFromEvent: [GubbinsTransfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [GubbinsTransfer!]! @derivedFrom(field: "toBalance")
 }
 
 type GubbinsTransfer implements Event @entity {
@@ -29,6 +33,15 @@ type GubbinsTransfer implements Event @entity {
 	valueExact: BigInt!
 }
 
+type GubbinsApproval @entity {
+	id: ID!
+	contract: GubbinsContract!
+	owner: Account!
+	spender: Account!
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+
 type GubbinsContract @entity {
 	id: ID!
 	asAccount: Account!
@@ -37,7 +50,7 @@ type GubbinsContract @entity {
 	decimals: Int!
 	totalSupply: GubbinsBalance!
 	balances: [GubbinsBalance!]! @derivedFrom(field: "contract")
-# 	approvals: [ERC20Approval!]! @derivedFrom(field: "contract")
+	approvals: [GubbinsApproval!]! @derivedFrom(field: "contract")
 	transfers: [GubbinsTransfer!]! @derivedFrom(field: "contract")
 }
 

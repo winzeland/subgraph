@@ -22,8 +22,8 @@ dataSources:
         - name: Gubbins
           file: ./abis/GubbinsERC20.json
       eventHandlers:
-        # - event: Approval(indexed address,indexed address,uint256)
-        #   handler: handleApproval
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/datasources/gubbins.ts
