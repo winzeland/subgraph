@@ -11,18 +11,23 @@
     "create": "graph create winzeland/subgraph --node https://api.thegraph.com/deploy/",
     "codegen": "graph codegen",
     "build": "graph build",
-    "prepare:mainnet": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml && mustache config/mainnet.json src/network.template.ts > src/network.ts",
+    "prepare:matic": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml && mustache config/mainnet.json src/network.template.ts > src/network.ts",
     "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && mustache config/mumbai.json src/network.template.ts > src/network.ts",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml && mustache config/rinkeby.json src/network.template.ts > src/network.ts",
     "prepare:local": "mustache config/local.json subgraph.template.yaml > subgraph.yaml && mustache config/local.json src/network.template.ts > src/network.ts",
+    "zeppelin": "npx graph-compiler --config config/zeppelin.json --include ./node_modules/@openzeppelin/subgraphs/src/datasources --export-schema --export-subgraph",
     "deploy": "graph deploy winzeland/subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "create-local": "graph create winzeland/subgraph --node http://127.0.0.1:8020",
     "deploy-local": "graph deploy winzeland/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "remove-local": "graph remove --node http://localhost:8020/ maticnetwork/mumbai-root-subgraphs",
+    "remove-local": "graph remove --ipfs http://localhost:5001 --node http://localhost:8020/ winzeland/subgraph",
     "dev": "yarn prepare:local && yarn codegen && yarn deploy-local -- --version-label v0.0.1"
   },
   "devDependencies": {
+    "@amxx/graphprotocol-utils": "^1.1.0-alpha.2",
     "@graphprotocol/graph-cli": "^0.25.3",
     "@graphprotocol/graph-ts": "^0.24.1",
+    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/subgraphs": "^0.1.7-1",
     "mustache": "^4.2.0"
   },
   "dependencies": {

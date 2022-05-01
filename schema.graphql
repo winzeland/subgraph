@@ -1,33 +1,305 @@
-"""
-This entity contains all user-specific data displayed on the dapp, including all user actions
-"""
-type User @entity {
-  """
-  wallet address
-  """
-  id: ID!
-  """
-  wallet address
-  """
-  gubbins: BigInt!
-  """
-  Array of user owned land nfts
-  """
-  lands: [Land!] @derivedFrom(field: "user")
-  """
-  Array of user owned winzer nfts
-  """
-  winzers: [Winzer!] @derivedFrom(field: "user")
+type Account @entity {
+	id: ID!
+	gubbins: GubbinsBalance @derivedFrom(field: "account")
+	asGubbins: GubbinsContract
+	gubbinsApprovalsOwner: [GubbinsApproval!]! @derivedFrom(field: "owner")
+	gubbinsApprovalsSpender: [GubbinsApproval!]! @derivedFrom(field: "spender")
+	gubbinsTransferFromEvent: [GubbinsTransfer!]! @derivedFrom(field: "from")
+	gubbinsTransferToEvent: [GubbinsTransfer!]! @derivedFrom(field: "to")
+	asWinzer: WinzerContract
+	winzerTokens: [WinzerToken!]! @derivedFrom(field: "owner")
+	winzerOperatorOwner: [WinzerOperator!]! @derivedFrom(field: "owner")
+	winzerOperatorOperator: [WinzerOperator!]! @derivedFrom(field: "operator")
+	winzerTransferFromEvent: [WinzerTransfer!]! @derivedFrom(field: "from")
+	winzerTransferToEvent: [WinzerTransfer!]! @derivedFrom(field: "to")
 }
 
-type Land @entity {
-  id: ID!
-  user: User!
-  x: BigInt!
-  y: BigInt!
+type GubbinsContract @entity {
+	id: ID!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+	totalSupply: GubbinsBalance!
+	balances: [GubbinsBalance!]! @derivedFrom(field: "contract")
+	approvals: [GubbinsApproval!]! @derivedFrom(field: "contract")
+	transfers: [GubbinsTransfer!]! @derivedFrom(field: "contract")
 }
 
-type Winzer @entity {
-  id: ID!
-  user: User!
+type GubbinsBalance @entity {
+	id: ID!
+	account: Account
+	contract: GubbinsContract!
+	value: BigDecimal!
+	valueExact: BigInt!
+	decimals: BigInt!
+	transferFromEvent: [GubbinsTransfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [GubbinsTransfer!]! @derivedFrom(field: "toBalance")
 }
+
+type GubbinsTransfer implements Event @entity {
+	id: ID!
+	emitter: Account!
+	contract: GubbinsContract!
+	transaction: Transaction!
+	timestamp: BigInt!
+	from: Account
+	fromBalance: GubbinsBalance
+	to: Account
+	toBalance: GubbinsBalance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+
+type GubbinsApproval @entity {
+	id: ID!
+	contract: GubbinsContract!
+	owner: Account!
+	spender: Account!
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+
+type WinzerContract @entity {
+	id: ID!
+	asAccount: Account!
+	supportsMetadata: Boolean
+	name: String
+	symbol: String
+	tokens: [WinzerToken!]! @derivedFrom(field: "contract")
+	operators: [WinzerOperator!]! @derivedFrom(field: "contract")
+	transfers: [WinzerTransfer!]! @derivedFrom(field: "contract")
+}
+
+type WinzerToken @entity {
+	id: ID!
+	contract: WinzerContract!
+	identifier: BigInt!
+	owner: Account!
+	approval: Account!
+	uri: String
+	dna: WinzerDNA @derivedFrom(field: "token")
+	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
+}
+
+type WinzerDNA @entity {
+	id: ID!
+	token: WinzerToken!
+	race: Int!
+	sex: Int!
+	skill: Int!
+	hair: Int!
+	beard: Int!
+	skin: Int!
+	face: Int!
+	eyes: Int!
+	mouth: Int!
+}
+
+type WinzerOperator @entity {
+	id: ID!
+	contract: WinzerContract!
+	owner: Account!
+	operator: Account!
+	approved: Boolean!
+}
+
+type WinzerTransfer implements Event @entity {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: WinzerContract!
+	token: WinzerToken!
+	from: Account!
+	to: Account!
+}
+
+
+
+
+type ERC20Contract @entity {
+	id: ID!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+}
+
+interface Event {
+	id: ID!
+	transaction: Transaction!
+	emitter: Account!
+	timestamp: BigInt!
+}
+
+type Transaction @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	events: [Event!]! @derivedFrom(field: "transaction")
+}
+
+# type Account @entity {
+# 	id: ID!
+# 	asERC721: ERC721Contract
+# 	ERC721tokens: [ERC721Token!]! @derivedFrom(field: "owner")
+# 	ERC721operatorOwner: [ERC721Operator!]! @derivedFrom(field: "owner")
+# 	ERC721operatorOperator: [ERC721Operator!]! @derivedFrom(field: "operator")
+# 	ERC721transferFromEvent: [ERC721Transfer!]! @derivedFrom(field: "from")
+# 	ERC721transferToEvent: [ERC721Transfer!]! @derivedFrom(field: "to")
+# 	asERC20: ERC20Contract
+# 	ERC20balances: [ERC20Balance!]! @derivedFrom(field: "account")
+# 	ERC20approvalsOwner: [ERC20Approval!]! @derivedFrom(field: "owner")
+# 	ERC20approvalsSpender: [ERC20Approval!]! @derivedFrom(field: "spender")
+# 	ERC20transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "from")
+# 	ERC20transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "to")
+# 	asAccessControl: AccessControl
+# 	membership: [AccessControlRoleMember!]! @derivedFrom(field: "account")
+# 	roleGranted: [RoleGranted!]! @derivedFrom(field: "account")
+# 	roleGrantedSender: [RoleGranted!]! @derivedFrom(field: "sender")
+# 	roleRevoked: [RoleRevoked!]! @derivedFrom(field: "account")
+# 	roleRevokedSender: [RoleRevoked!]! @derivedFrom(field: "sender")
+# 	events: [Event!]! @derivedFrom(field: "emitter")
+# }
+# type ERC20Contract @entity {
+# 	id: ID!
+# 	asAccount: Account!
+# 	name: String
+# 	symbol: String
+# 	decimals: Int!
+# 	totalSupply: ERC20Balance!
+# 	balances: [ERC20Balance!]! @derivedFrom(field: "contract")
+# 	approvals: [ERC20Approval!]! @derivedFrom(field: "contract")
+# 	transfers: [ERC20Transfer!]! @derivedFrom(field: "contract")
+# }
+# type ERC20Balance @entity {
+# 	id: ID!
+# 	contract: ERC20Contract!
+# 	account: Account
+# 	value: BigDecimal!
+# 	valueExact: BigInt!
+# 	transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "fromBalance")
+# 	transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "toBalance")
+# }
+# type ERC20Approval @entity {
+# 	id: ID!
+# 	contract: ERC20Contract!
+# 	owner: Account!
+# 	spender: Account!
+# 	value: BigDecimal!
+# 	valueExact: BigInt!
+# }
+# type ERC20Transfer implements Event @entity {
+# 	id: ID!
+# 	emitter: Account!
+# 	transaction: Transaction!
+# 	timestamp: BigInt!
+# 	contract: ERC20Contract!
+# 	from: Account
+# 	fromBalance: ERC20Balance
+# 	to: Account
+# 	toBalance: ERC20Balance
+# 	value: BigDecimal!
+# 	valueExact: BigInt!
+# }
+# type AccessControl @entity {
+# 	id: ID!
+# 	asAccount: Account!
+# 	roles: [AccessControlRole!]! @derivedFrom(field: "contract")
+# }
+# type Role @entity {
+# 	id: ID!
+# 	roleOf: [AccessControlRole!]! @derivedFrom(field: "role")
+# }
+# type AccessControlRole @entity {
+# 	id: ID!
+# 	contract: AccessControl!
+# 	role: Role!
+# 	admin: AccessControlRole!
+# 	adminOf: [AccessControlRole!]! @derivedFrom(field: "admin")
+# 	members: [AccessControlRoleMember!]! @derivedFrom(field: "accesscontrolrole")
+# 	roleGranted: [RoleGranted!]! @derivedFrom(field: "role")
+# 	roleRevoked: [RoleRevoked!]! @derivedFrom(field: "role")
+# 	roleAdminChanged: [RoleAdminChanged!]! @derivedFrom(field: "role")
+# }
+# type AccessControlRoleMember @entity {
+# 	id: ID!
+# 	accesscontrolrole: AccessControlRole!
+# 	account: Account!
+# }
+# type RoleAdminChanged implements Event @entity {
+# 	id: ID!
+# 	emitter: Account!
+# 	transaction: Transaction!
+# 	timestamp: BigInt!
+# 	role: AccessControlRole!
+# 	newAdminRole: AccessControlRole!
+# 	previousAdminRole: AccessControlRole!
+# }
+# type RoleGranted implements Event @entity {
+# 	id: ID!
+# 	emitter: Account!
+# 	transaction: Transaction!
+# 	timestamp: BigInt!
+# 	role: AccessControlRole!
+# 	account: Account!
+# 	sender: Account!
+# }
+# type RoleRevoked implements Event @entity {
+# 	id: ID!
+# 	emitter: Account!
+# 	transaction: Transaction!
+# 	timestamp: BigInt!
+# 	role: AccessControlRole!
+# 	account: Account!
+# 	sender: Account!
+# }
+# type ERC721Contract @entity {
+# 	id: ID!
+# 	asAccount: Account!
+# 	supportsMetadata: Boolean
+# 	name: String
+# 	symbol: String
+# 	tokens: [ERC721Token!]! @derivedFrom(field: "contract")
+# 	operators: [ERC721Operator!]! @derivedFrom(field: "contract")
+# 	transfers: [ERC721Transfer!]! @derivedFrom(field: "contract")
+# }
+# type ERC721Token @entity {
+# 	id: ID!
+# 	contract: ERC721Contract!
+# 	identifier: BigInt!
+# 	owner: Account!
+# 	approval: Account!
+# 	uri: String
+# 	transfers: [ERC721Transfer!]! @derivedFrom(field: "token")
+# }
+# type ERC721Operator @entity {
+# 	id: ID!
+# 	contract: ERC721Contract!
+# 	owner: Account!
+# 	operator: Account!
+# 	approved: Boolean!
+# }
+# type ERC721Transfer implements Event @entity {
+# 	id: ID!
+# 	emitter: Account!
+# 	transaction: Transaction!
+# 	timestamp: BigInt!
+# 	contract: ERC721Contract!
+# 	token: ERC721Token!
+# 	from: Account!
+# 	to: Account!
+# }
+# interface Event {
+# 	id: ID!
+# 	transaction: Transaction!
+# 	emitter: Account!
+# 	timestamp: BigInt!
+# }
+# type Transaction @entity {
+# 	id: ID!
+# 	timestamp: BigInt!
+# 	blockNumber: BigInt!
+# 	events: [Event!]! @derivedFrom(field: "transaction")
+# }

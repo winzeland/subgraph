@@ -4,32 +4,37 @@ repository: https://github.com/winzeland/subgraph
 schema:
   file: ./schema.graphql
 dataSources:
+
   - kind: ethereum/contract
-    name: Gubbins
-    network: {{ network }}
+    name: gubbins
+    network: {{network}}
     source:
-      address: '{{ contracts.GubbinsERC20.address}}'
+      address: "{{contracts.GubbinsERC20.address}}"
       abi: Gubbins
+      startBlock: {{contracts.GubbinsERC20.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Gubbins
+        - GubbinsBalance
       abis:
         - name: Gubbins
           file: ./abis/GubbinsERC20.json
       eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      file: ./src/gubbins-mappings.ts
+      file: ./src/datasources/gubbins.ts
 
   - kind: ethereum/contract
-    name: Winzer
-    network: {{ network }}
+    name: winzer
+    network: {{network}}
     source:
-      address: '{{ contracts.WinzerERC721.address }}'
+      address: "{{contracts.WinzerERC721.address}}"
       abi: Winzer
+      startBlock: {{contracts.WinzerERC721.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -40,6 +45,132 @@ dataSources:
         - name: Winzer
           file: ./abis/WinzerERC721.json
       eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/NFTs/winzer-mappings.ts
+        - event: DnaUpdated(indexed uint256,(uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8))
+          handler: handleDnaUpdate
+      file: ./src/datasources/winzer.ts
+
+  # - kind: ethereum/contract
+  #   name: Winzer
+  #   network: {{ network }}
+  #   source:
+  #     address: '{{ contracts.WinzerERC721.address }}'
+  #     abi: Winzer
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Winzer
+  #     abis:
+  #       - name: Winzer
+  #         file: ./abis/WinzerERC721.json
+  #     eventHandlers:
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer
+  #     file: ./src/NFTs/winzer-mappings.ts
+
+### GENERATED FROM @OPENZEPELLIN
+
+  # - kind: ethereum/contract
+  #   name: erc20
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.GubbinsERC20.address}}"
+  #     abi: IERC20
+  #     startBlock: {{contracts.GubbinsERC20.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - ERC20Contract
+  #     abis:
+  #       - name: IERC20
+  #         file: ./node_modules/@openzeppelin/contracts/build/contracts/IERC20Metadata.json
+  #     eventHandlers:
+  #       - event: Approval(indexed address,indexed address,uint256)
+  #         handler: handleApproval
+  #       - event: Transfer(indexed address,indexed address,uint256)
+  #         handler: handleTransfer
+  #     file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc20.ts
+
+  # - kind: ethereum/contract
+  #   name: erc721
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.WinzerERC721.address}}"
+  #     abi: IERC721
+  #     startBlock: {{contracts.WinzerERC721.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - ERC721Contract
+  #     abis:
+  #       - name: IERC721
+  #         file: ./node_modules/@openzeppelin/contracts/build/contracts/IERC721Metadata.json
+  #     eventHandlers:
+  #       - event: Approval(indexed address,indexed address,indexed uint256)
+  #         handler: handleApproval
+  #       - event: ApprovalForAll(indexed address,indexed address,bool)
+  #         handler: handleApprovalForAll
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer
+  #     file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc721.ts
+
+  # - kind: ethereum/contract
+  #   name: accesscontrol-gubbins
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.GubbinsERC20.address}}"
+  #     abi: AccessControl
+  #     startBlock: {{contracts.GubbinsERC20.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - AccessControl
+  #     abis:
+  #       - name: AccessControl
+  #         file: ./node_modules/@openzeppelin/contracts/build/contracts/IAccessControl.json
+  #     eventHandlers:
+  #       - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+  #         handler: handleRoleAdminChanged
+  #       - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleGranted
+  #       - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleRevoked
+  #     file: ./node_modules/@openzeppelin/subgraphs/src/datasources/accesscontrol.ts
+
+  # - kind: ethereum/contract
+  #   name: accesscontrol-winzer
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.WinzerERC721.address}}"
+  #     abi: AccessControl
+  #     startBlock: {{contracts.WinzerERC721.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - AccessControl
+  #     abis:
+  #       - name: AccessControl
+  #         file: ./node_modules/@openzeppelin/contracts/build/contracts/IAccessControl.json
+  #     eventHandlers:
+  #       - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+  #         handler: handleRoleAdminChanged
+  #       - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleGranted
+  #       - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleRevoked
+  #     file: ./node_modules/@openzeppelin/subgraphs/src/datasources/accesscontrol.ts
