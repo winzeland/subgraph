@@ -7,6 +7,7 @@ import {
 
 import {
 	Account,
+	GubbinsApproval,
 	GubbinsBalance,
 	GubbinsContract,
 } from '../../generated/schema'
@@ -55,18 +56,18 @@ export function fetchGubbinsBalance(contract: GubbinsContract, account: Account 
 	return balance as GubbinsBalance
 }
 
-// export function fetchGubbinsApproval(contract: GubbinsContract, owner: Account, spender: Account): ERC20Approval {
-// 	let id       = contract.id.concat('/').concat(owner.id).concat('/').concat(spender.id)
-// 	let approval = ERC20Approval.load(id)
+export function fetchGubbinsApproval(contract: GubbinsContract, owner: Account, spender: Account): GubbinsApproval {
+	let id       = contract.id.concat('/').concat(owner.id).concat('/').concat(spender.id)
+	let approval = GubbinsApproval.load(id)
 
-// 	if (approval == null) {
-// 		approval                = new ERC20Approval(id)
-// 		approval.contract       = contract.id
-// 		approval.owner          = owner.id
-// 		approval.spender        = spender.id
-// 		approval.value          = constants.BIGDECIMAL_ZERO
-// 		approval.valueExact     = constants.BIGINT_ZERO
-// 	}
+	if (approval == null) {
+		approval                = new GubbinsApproval(id)
+		approval.contract       = contract.id
+		approval.owner          = owner.id
+		approval.spender        = spender.id
+		approval.value          = constants.BIGDECIMAL_ZERO
+		approval.valueExact     = constants.BIGINT_ZERO
+	}
 
-// 	return approval as ERC20Approval
-// }
+	return approval as GubbinsApproval
+}

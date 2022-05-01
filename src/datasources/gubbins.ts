@@ -4,7 +4,7 @@ import {
 
 import {
 	Transfer as TransferEvent,
-	// Approval as ApprovalEvent,
+	Approval as ApprovalEvent,
 } from '../../generated/Gubbins/Gubbins'
 
 import {
@@ -64,24 +64,24 @@ export function handleTransfer(event: TransferEvent): void {
 	ev.save()
 }
 
-// export function handleApproval(event: ApprovalEvent): void {
-// 	let contract = fetchERC20(event.address)
+export function handleApproval(event: ApprovalEvent): void {
+	let contract = fetchGubbins(event.address)
 
-// 	let owner           = fetchAccount(event.params.owner)
-// 	let spender         = fetchAccount(event.params.spender)
-// 	let approval        = fetchERC20Approval(contract, owner, spender)
-// 	approval.valueExact = event.params.value
-// 	approval.value      = decimals.toDecimals(event.params.value, contract.decimals)
-// 	approval.save()
+	let owner           = fetchAccount(event.params.owner)
+	let spender         = fetchAccount(event.params.spender)
+	let approval        = fetchERC20Approval(contract, owner, spender)
+	approval.valueExact = event.params.value
+	approval.value      = decimals.toDecimals(event.params.value, contract.decimals)
+	approval.save()
 
-// 	// let ev         = new ERC20ApprovalEvent(events.id(event))
-// 	// ev.emitter     = contract.id
-// 	// ev.transaction = transactions.log(event).id
-// 	// ev.timestamp   = event.block.timestamp
-// 	// ev.token       = token.id
-// 	// ev.owner       = owner.id
-// 	// ev.spender     = spender.id
-// 	// ev.approval    = approval.id
-// 	// ev.value       = value.value
-// 	// ev.save()
-// }
+	// let ev         = new ERC20ApprovalEvent(events.id(event))
+	// ev.emitter     = contract.id
+	// ev.transaction = transactions.log(event).id
+	// ev.timestamp   = event.block.timestamp
+	// ev.token       = token.id
+	// ev.owner       = owner.id
+	// ev.spender     = spender.id
+	// ev.approval    = approval.id
+	// ev.value       = value.value
+	// ev.save()
+}
