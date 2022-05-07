@@ -67,128 +67,62 @@
         "components": [
           {
             "internalType": "uint8",
-            "name": "race",
+            "name": "x",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "sex",
+            "name": "y",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "skin",
+            "name": "climate",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "head",
+            "name": "landType",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "ears",
+            "name": "resource1",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "hair",
+            "name": "resource2",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "beard",
+            "name": "resource3",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "mouth",
+            "name": "resourceLevel1",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "eyes",
+            "name": "resourceLevel2",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "eyebrows",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "nose",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "scars",
+            "name": "resourceLevel3",
             "type": "uint8"
           }
         ],
         "indexed": false,
-        "internalType": "struct WinzerERC721.DNA",
+        "internalType": "struct LandERC721.DNA",
         "name": "_dna",
         "type": "tuple"
       }
     ],
     "name": "DnaUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "accessory",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "makeup",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill1",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill2",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill3",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill4",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill5",
-            "type": "uint8"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct WinzerERC721.ExtraDNA",
-        "name": "_dna",
-        "type": "tuple"
-      }
-    ],
-    "name": "ExtraDnaUpdated",
     "type": "event"
   },
   {
@@ -370,72 +304,46 @@
   {
     "inputs": [
       {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "coordinates",
+    "outputs": [
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
-    "name": "dna",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "coordinatesTaken",
     "outputs": [
       {
-        "internalType": "uint8",
-        "name": "race",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "sex",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "skin",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "head",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "ears",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "hair",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "beard",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "mouth",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "eyes",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "eyebrows",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "nose",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "scars",
-        "type": "uint8"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -449,41 +357,56 @@
         "type": "uint256"
       }
     ],
-    "name": "extraDna",
+    "name": "dna",
     "outputs": [
       {
         "internalType": "uint8",
-        "name": "accessory",
+        "name": "x",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "makeup",
+        "name": "y",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "skill1",
+        "name": "climate",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "skill2",
+        "name": "landType",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "skill3",
+        "name": "resource1",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "skill4",
+        "name": "resource2",
         "type": "uint8"
       },
       {
         "internalType": "uint8",
-        "name": "skill5",
+        "name": "resource3",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel1",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel2",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel3",
         "type": "uint8"
       }
     ],
@@ -648,109 +571,57 @@
         "components": [
           {
             "internalType": "uint8",
-            "name": "race",
+            "name": "x",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "sex",
+            "name": "y",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "skin",
+            "name": "climate",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "head",
+            "name": "landType",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "ears",
+            "name": "resource1",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "hair",
+            "name": "resource2",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "beard",
+            "name": "resource3",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "mouth",
+            "name": "resourceLevel1",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "eyes",
+            "name": "resourceLevel2",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "eyebrows",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "nose",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "scars",
+            "name": "resourceLevel3",
             "type": "uint8"
           }
         ],
-        "internalType": "struct WinzerERC721.DNA",
+        "internalType": "struct LandERC721.DNA",
         "name": "_dna",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "accessory",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "makeup",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill1",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill2",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill3",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill4",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "skill5",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct WinzerERC721.ExtraDNA",
-        "name": "_extraDna",
         "type": "tuple"
       }
     ],

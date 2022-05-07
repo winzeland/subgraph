@@ -12,6 +12,12 @@ type Account @entity {
 	winzerOperatorOperator: [WinzerOperator!]! @derivedFrom(field: "operator")
 	winzerTransferFromEvent: [WinzerTransfer!]! @derivedFrom(field: "from")
 	winzerTransferToEvent: [WinzerTransfer!]! @derivedFrom(field: "to")
+	asLand: LandContract
+	landTokens: [LandToken!]! @derivedFrom(field: "owner")
+	landOperatorOwner: [LandOperator!]! @derivedFrom(field: "owner")
+	landOperatorOperator: [LandOperator!]! @derivedFrom(field: "operator")
+	landTransferFromEvent: [LandTransfer!]! @derivedFrom(field: "from")
+	landTransferToEvent: [LandTransfer!]! @derivedFrom(field: "to")
 }
 
 type GubbinsContract @entity {
@@ -79,6 +85,7 @@ type WinzerToken @entity {
 	approval: Account!
 	uri: String
 	dna: WinzerDNA @derivedFrom(field: "token")
+	extraDna: WinzerExtraDNA @derivedFrom(field: "token")
 	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
 }
 
@@ -87,13 +94,28 @@ type WinzerDNA @entity {
 	token: WinzerToken!
 	race: Int!
 	sex: Int!
-	skill: Int!
+	skin: Int!
+	head: Int!
+	ears: Int!
 	hair: Int!
 	beard: Int!
-	skin: Int!
-	face: Int!
-	eyes: Int!
 	mouth: Int!
+	eyes: Int!
+	eyebrows: Int!
+	nose: Int!
+	scars: Int!
+}
+
+type WinzerExtraDNA @entity {
+	id: ID!
+	token: WinzerToken!
+    accessory: Int!
+    makeup: Int!
+    skill1: Int!
+    skill2: Int!
+    skill3: Int!
+    skill4: Int!
+    skill5: Int!
 }
 
 type WinzerOperator @entity {
@@ -115,7 +137,53 @@ type WinzerTransfer implements Event @entity {
 	to: Account!
 }
 
+type LandContract @entity {
+	id: ID!
+	asAccount: Account!
+	supportsMetadata: Boolean
+	name: String
+	symbol: String
+	tokens: [LandToken!]! @derivedFrom(field: "contract")
+	operators: [LandOperator!]! @derivedFrom(field: "contract")
+	transfers: [LandTransfer!]! @derivedFrom(field: "contract")
+}
 
+type LandToken @entity {
+	id: ID!
+	contract: LandContract!
+	identifier: BigInt!
+	owner: Account!
+	approval: Account!
+	uri: String
+	dna: LandDNA @derivedFrom(field: "token")
+	transfers: [LandTransfer!]! @derivedFrom(field: "token")
+}
+
+type LandDNA @entity {
+	id: ID!
+	token: LandToken!
+	x: Int!
+	y: Int!
+}
+
+type LandOperator @entity {
+	id: ID!
+	contract: LandContract!
+	owner: Account!
+	operator: Account!
+	approved: Boolean!
+}
+
+type LandTransfer implements Event @entity {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: LandContract!
+	token: LandToken!
+	from: Account!
+	to: Account!
+}
 
 
 type ERC20Contract @entity {

@@ -16,12 +16,13 @@ import {
 	WinzerContract,
 	WinzerOperator,
 	WinzerDNA,
+	WinzerExtraDNA,
 } from '../../generated/schema'
 
 import {
 	fetchAccount
 } from './account'
-import { DnaUpdated_dnaStruct, DnaUpdated__Params, Winzer } from '../../generated/Winzer/Winzer'
+import { DnaUpdated_dnaStruct, DnaUpdated__Params, ExtraDnaUpdated_dnaStruct, Winzer } from '../../generated/Winzer/Winzer'
 
 export function fetchWinzer(address: Address): WinzerContract | null {
 	let erc721           = Winzer.bind(address)
@@ -105,15 +106,39 @@ export function fetchWinzerDNA(identifier: BigInt, params: DnaUpdated_dnaStruct 
 		if (params) {
 			dna.race 	= params.race;
 			dna.sex 	= params.sex;
-			dna.skill 	= params.skill;
+			dna.skin 	= params.skin;
+			dna.head 	= params.head;
+			dna.ears 	= params.ears;
 			dna.hair 	= params.hair;
 			dna.beard 	= params.beard;
-			dna.skin 	= params.skin;
-			dna.face 	= params.face;
-			dna.eyes 	= params.eyes;
 			dna.mouth 	= params.mouth;
+			dna.eyes 	= params.eyes;
+			dna.eyebrows 	= params.eyebrows;
+			dna.nose 	= params.nose;
+			dna.scars 	= params.scars;
 		}
 	}
 
 	return dna as WinzerDNA;
+}
+
+export function fetchWinzerExtraDNA(identifier: BigInt, params: ExtraDnaUpdated_dnaStruct | null): WinzerExtraDNA {
+	let id = identifier.toHex();
+	let dna = WinzerExtraDNA.load(id)
+
+	if (dna == null) {
+		dna          = new WinzerExtraDNA(id)
+		dna.token	 = id;
+		if (params) {
+			dna.accessory 	= params.accessory;
+			dna.makeup 		= params.makeup;
+			dna.skill1 		= params.skill1;
+			dna.skill2 		= params.skill2;
+			dna.skill3 		= params.skill3;
+			dna.skill4 		= params.skill4;
+			dna.skill5 		= params.skill5;
+		}
+	}
+
+	return dna as WinzerExtraDNA;
 }

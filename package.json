@@ -20,7 +20,8 @@
     "create-local": "graph create winzeland/subgraph --node http://127.0.0.1:8020",
     "deploy-local": "graph deploy winzeland/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "remove-local": "graph remove --ipfs http://localhost:5001 --node http://localhost:8020/ winzeland/subgraph",
-    "dev": "yarn prepare:local && yarn codegen && yarn deploy-local -- --version-label v0.0.1"
+    "codegen:local": "yarn prepare:local && yarn codegen",
+    "dev": "yarn codegen:local && yarn deploy-local -- --version-label v0.0.1"
   },
   "devDependencies": {
     "@amxx/graphprotocol-utils": "^1.1.0-alpha.2",
