@@ -1,5 +1,5 @@
 {
-  "name": "winzeland-subgraph",
+  "name": "@winzeland/subgraph",
   "version": "0.1",
   "description": "Subgraph for Winzeland",
   "main": "index.js",
