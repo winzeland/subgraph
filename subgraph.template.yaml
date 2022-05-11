@@ -53,32 +53,32 @@ dataSources:
           handler: handleTransfer
       file: ./src/datasources/winzer.ts
 
-  - kind: ethereum/contract
-    name: land
-    network: {{network}}
-    source:
-      address: "{{contracts.LandERC721.address}}"
-      abi: Land
-      startBlock: {{contracts.LandERC721.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - Land
-      abis:
-        - name: Land
-          file: ./abis/LandERC721.json
-      eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-        - event: DnaUpdated(indexed uint256,(uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8))
-          handler: handleDnaUpdate
-      file: ./src/datasources/land.ts
+  # - kind: ethereum/contract
+  #   name: land
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.LandERC721.address}}"
+  #     abi: Land
+  #     startBlock: {{contracts.LandERC721.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Land
+  #     abis:
+  #       - name: Land
+  #         file: ./abis/LandERC721.json
+  #     eventHandlers:
+  #       - event: Approval(indexed address,indexed address,indexed uint256)
+  #         handler: handleApproval
+  #       - event: ApprovalForAll(indexed address,indexed address,bool)
+  #         handler: handleApprovalForAll
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer
+  #       - event: DnaUpdated(indexed uint256,(uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8))
+  #         handler: handleDnaUpdate
+  #     file: ./src/datasources/land.ts
 
   # - kind: ethereum/contract
   #   name: Winzer

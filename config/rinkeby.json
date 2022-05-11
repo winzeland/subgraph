@@ -2,12 +2,12 @@
   "network": "rinkeby",
   "contracts": {
     "WinzerERC721": {
-      "address": "0xb77CEB0a33180eF96E212e8a7Db8260eE977EADA",
-      "startBlock": 10634938
+      "address": "0xDf7e2B32348AFF0cc8A63b263F5b5b2E235Ab6F9",
+      "startBlock": 10659321
     },
     "LandERC721": {
-      "address": "0x7f8F1E90b53384cb0e0ae5233B39210e14539b92",
-      "startBlock": 10634949
+      "address": "0x00d6A6BAE1BfBa5Ca707fB6B54AA0dEB13c3E683",
+      "startBlock": 10659322
     },
     "GubbinsERC20": {
       "address": "0x9dC4d9073f2F3d58b564b0E278A007D3294a44D2",
