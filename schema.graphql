@@ -84,14 +84,21 @@ type WinzerToken @entity {
 	owner: Account!
 	approval: Account!
 	uri: String
-	dna: WinzerDNA @derivedFrom(field: "token")
-	extraDna: WinzerExtraDNA @derivedFrom(field: "token")
+	dna: WinzerDNA!
 	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
+	father: WinzerToken!
+	mother: WinzerToken!
+	children: [WinzerFamily!]! @derivedFrom(field: "parent")
+	parents: [WinzerFamily!]! @derivedFrom(field: "child")
+    skill1: Int!
+    skill2: Int!
+    skill3: Int!
+    skill4: Int!
+    skill5: Int!
 }
 
 type WinzerDNA @entity {
 	id: ID!
-	token: WinzerToken!
 	race: Int!
 	sex: Int!
 	skin: Int!
@@ -104,18 +111,14 @@ type WinzerDNA @entity {
 	eyebrows: Int!
 	nose: Int!
 	scars: Int!
+	accessory: Int!
+    makeup: Int!
 }
 
-type WinzerExtraDNA @entity {
+type WinzerFamily @entity {
 	id: ID!
-	token: WinzerToken!
-    accessory: Int!
-    makeup: Int!
-    skill1: Int!
-    skill2: Int!
-    skill3: Int!
-    skill4: Int!
-    skill5: Int!
+	parent: WinzerToken!
+	child: WinzerToken!
 }
 
 type WinzerOperator @entity {

@@ -16,13 +16,13 @@ import {
 	WinzerContract,
 	WinzerOperator,
 	WinzerDNA,
-	WinzerExtraDNA,
+	WinzerFamily,
 } from '../../generated/schema'
 
 import {
 	fetchAccount
 } from './account'
-import { DnaUpdated_dnaStruct, DnaUpdated__Params, ExtraDnaUpdated_dnaStruct, Winzer } from '../../generated/Winzer/Winzer'
+import { Winzer } from '../../generated/Winzer/Winzer'
 
 export function fetchWinzer(address: Address): WinzerContract | null {
 	let erc721           = Winzer.bind(address)
@@ -79,7 +79,69 @@ export function fetchWinzerToken(contract: WinzerContract, identifier: BigInt): 
 		}
 	}
 
+
+	let dna = WinzerDNA.load(id);
+
+	if (dna === null) {
+		dna = new WinzerDNA(id);
+
+		let erc721       = Winzer.bind(Address.fromString(contract.id))
+
+		let try_dna1	 = erc721.try_dna1(identifier);
+		let try_dna2	 = erc721.try_dna2(identifier);
+
+		if (!try_dna1.reverted) {
+			const params 	= try_dna1.value;
+			dna.race 		= params.value0;
+			dna.sex 		= params.value1;
+			dna.skin 		= params.value2;
+			dna.head 		= params.value3;
+			dna.ears 		= params.value4;
+			dna.hair 		= params.value5;
+			dna.beard 		= params.value6;
+			dna.mouth 		= params.value7;
+			dna.eyes 		= params.value8;
+			dna.eyebrows 	= params.value9;
+			dna.nose 		= params.value10;
+			dna.scars 		= params.value11;
+		}
+
+		if (!try_dna2.reverted) {
+			const params	= try_dna2.value;
+
+			dna.accessory	= params.value2;
+			dna.makeup		= params.value3;
+
+			token.father	= params.value0.toHex();
+			token.mother	= params.value1.toHex();
+			token.skill1	= params.value4;
+			token.skill2	= params.value5;
+			token.skill3	= params.value6;
+			token.skill4	= params.value7;
+			token.skill5	= params.value8;
+
+			const father 	= fetchWinzerFamily(params.value0.toHex(), id);
+			const mother 	= fetchWinzerFamily(params.value1.toHex(), id);
+
+			father.save();
+			mother.save();
+		}
+	}
+
 	return token as WinzerToken
+}
+
+export function fetchWinzerFamily(parent: string, child: string): WinzerFamily {
+	let id = parent.concat('/').concat(child);
+	let entity = WinzerFamily.load(id);
+
+	if (entity == null) {
+		entity 			= new WinzerFamily(id);
+		entity.parent 	= parent;
+		entity.child  	= child; 
+	}
+
+	return entity as WinzerFamily;
 }
 
 export function fetchWinzerOperator(contract: WinzerContract, owner: Account, operator: Account): WinzerOperator {
@@ -94,51 +156,4 @@ export function fetchWinzerOperator(contract: WinzerContract, owner: Account, op
 	}
 
 	return op as WinzerOperator
-}
-
-export function fetchWinzerDNA(identifier: BigInt, params: DnaUpdated_dnaStruct | null): WinzerDNA {
-	let id = identifier.toHex();
-	let dna = WinzerDNA.load(id)
-
-	if (dna == null) {
-		dna          = new WinzerDNA(id)
-		dna.token	 = id;
-		if (params) {
-			dna.race 	= params.race;
-			dna.sex 	= params.sex;
-			dna.skin 	= params.skin;
-			dna.head 	= params.head;
-			dna.ears 	= params.ears;
-			dna.hair 	= params.hair;
-			dna.beard 	= params.beard;
-			dna.mouth 	= params.mouth;
-			dna.eyes 	= params.eyes;
-			dna.eyebrows 	= params.eyebrows;
-			dna.nose 	= params.nose;
-			dna.scars 	= params.scars;
-		}
-	}
-
-	return dna as WinzerDNA;
-}
-
-export function fetchWinzerExtraDNA(identifier: BigInt, params: ExtraDnaUpdated_dnaStruct | null): WinzerExtraDNA {
-	let id = identifier.toHex();
-	let dna = WinzerExtraDNA.load(id)
-
-	if (dna == null) {
-		dna          = new WinzerExtraDNA(id)
-		dna.token	 = id;
-		if (params) {
-			dna.accessory 	= params.accessory;
-			dna.makeup 		= params.makeup;
-			dna.skill1 		= params.skill1;
-			dna.skill2 		= params.skill2;
-			dna.skill3 		= params.skill3;
-			dna.skill4 		= params.skill4;
-			dna.skill5 		= params.skill5;
-		}
-	}
-
-	return dna as WinzerExtraDNA;
 }
