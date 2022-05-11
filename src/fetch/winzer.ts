@@ -85,6 +85,8 @@ export function fetchWinzerToken(contract: WinzerContract, identifier: BigInt): 
 	if (dna === null) {
 		dna = new WinzerDNA(id);
 
+		dna.token		 = id;
+
 		let erc721       = Winzer.bind(Address.fromString(contract.id))
 
 		let try_dna1	 = erc721.try_dna1(identifier);
@@ -126,6 +128,7 @@ export function fetchWinzerToken(contract: WinzerContract, identifier: BigInt): 
 			father.save();
 			mother.save();
 		}
+		dna.save();
 	}
 
 	return token as WinzerToken

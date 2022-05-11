@@ -84,7 +84,7 @@ type WinzerToken @entity {
 	owner: Account!
 	approval: Account!
 	uri: String
-	dna: WinzerDNA!
+	dna: WinzerDNA! @derivedFrom(field: "token")
 	transfers: [WinzerTransfer!]! @derivedFrom(field: "token")
 	father: WinzerToken!
 	mother: WinzerToken!
@@ -99,6 +99,7 @@ type WinzerToken @entity {
 
 type WinzerDNA @entity {
 	id: ID!
+	token: WinzerToken!
 	race: Int!
 	sex: Int!
 	skin: Int!
