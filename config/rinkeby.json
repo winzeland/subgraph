@@ -2,8 +2,8 @@
   "network": "rinkeby",
   "contracts": {
     "WinzerERC721": {
-      "address": "0xDf7e2B32348AFF0cc8A63b263F5b5b2E235Ab6F9",
-      "startBlock": 10659321
+      "address": "0xF954d611eC87d8da4439642230bbB68325415413",
+      "startBlock": 10675037
     },
     "LandERC721": {
       "address": "0x00d6A6BAE1BfBa5Ca707fB6B54AA0dEB13c3E683",

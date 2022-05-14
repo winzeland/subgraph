@@ -2,7 +2,8 @@
   "network": "matic",
   "contracts": {
     "WinzerERC721": {
-      "address": ""
+      "address": "0xD8607E07891B42aF8f7c3c4d6ed6A19F923369B3",
+      "startBlock": 28311452
     }
   }
 }

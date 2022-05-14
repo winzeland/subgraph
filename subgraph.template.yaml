@@ -5,28 +5,28 @@ schema:
   file: ./schema.graphql
 dataSources:
 
-  - kind: ethereum/contract
-    name: gubbins
-    network: {{network}}
-    source:
-      address: "{{contracts.GubbinsERC20.address}}"
-      abi: Gubbins
-      startBlock: {{contracts.GubbinsERC20.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - GubbinsBalance
-      abis:
-        - name: Gubbins
-          file: ./abis/GubbinsERC20.json
-      eventHandlers:
-        - event: Approval(indexed address,indexed address,uint256)
-          handler: handleApproval
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src/datasources/gubbins.ts
+  # - kind: ethereum/contract
+  #   name: gubbins
+  #   network: {{network}}
+  #   source:
+  #     address: "{{contracts.GubbinsERC20.address}}"
+  #     abi: Gubbins
+  #     startBlock: {{contracts.GubbinsERC20.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - GubbinsBalance
+  #     abis:
+  #       - name: Gubbins
+  #         file: ./abis/GubbinsERC20.json
+  #     eventHandlers:
+  #       - event: Approval(indexed address,indexed address,uint256)
+  #         handler: handleApproval
+  #       - event: Transfer(indexed address,indexed address,uint256)
+  #         handler: handleTransfer
+  #     file: ./src/datasources/gubbins.ts
 
   - kind: ethereum/contract
     name: winzer
