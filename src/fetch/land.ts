@@ -14,15 +14,15 @@ import {
 	Account,
 	LandContract,
 	LandToken,
+	LandProperties,
 	LandOperator,
-	LandDNA,
 } from '../../generated/schema'
 
 import {
 	fetchAccount
 } from './account'
-import { DnaUpdated_dnaStruct } from '../../generated/Land/Land'
-import { Land } from '../../generated/land/Land'
+
+import { Land } from '../../generated/Land/Land'
 
 export function fetchLand(address: Address): LandContract | null {
 	let erc721           = Land.bind(address)
@@ -52,7 +52,7 @@ export function fetchLand(address: Address): LandContract | null {
 			contract.symbol           = try_symbol.reverted ? '' : try_symbol.value
 			contract.supportsMetadata = supportsInterface(erc721, '5b5e139f') // ERC721Metadata
 			contract.asAccount        = account.id
-			account.asLand	          = account.id
+			account.asLand            = account.id
 			contract.save()
 			account.save()
 		}
@@ -79,6 +79,37 @@ export function fetchLandToken(contract: LandContract, identifier: BigInt): Land
 		}
 	}
 
+
+	let properties = LandProperties.load(id);
+
+	if (properties === null) {
+		properties = new LandProperties(id);
+
+		properties.token	= id;
+
+		let erc721			= Land.bind(Address.fromString(contract.id))
+
+		let try_properties	= erc721.try_properties(identifier);
+
+		if (!try_properties.reverted) {
+			const params 				= try_properties.value;
+			properties.x 				= params.value0;
+			properties.y 				= params.value1;
+			properties.climate 			= params.value2;
+			properties.landType 		= params.value3;
+			properties.resource1 		= params.value4;
+			properties.resource2 		= params.value5;
+			properties.resource3 		= params.value6;
+			properties.resource4 		= params.value7;
+			properties.resourceLevel1 	= params.value8;
+			properties.resourceLevel2 	= params.value9;
+			properties.resourceLevel3 	= params.value10;
+			properties.resourceLevel4 	= params.value11;
+		}
+
+		properties.save();
+	}
+
 	return token as LandToken
 }
 
@@ -94,27 +125,4 @@ export function fetchLandOperator(contract: LandContract, owner: Account, operat
 	}
 
 	return op as LandOperator
-}
-
-export function fetchLandDNA(identifier: BigInt, params: DnaUpdated_dnaStruct | null): LandDNA {
-	let id = identifier.toHex();
-	let dna = LandDNA.load(id)
-
-	if (dna == null) {
-		dna          = new LandDNA(id)
-		dna.token	 = id;
-		if (params) {
-			// dna.race 	= params.race;
-			// dna.sex 	= params.sex;
-			// dna.skill 	= params.skill;
-			// dna.hair 	= params.hair;
-			// dna.beard 	= params.beard;
-			// dna.skin 	= params.skin;
-			// dna.face 	= params.face;
-			// dna.eyes 	= params.eyes;
-			// dna.mouth 	= params.mouth;
-		}
-	}
-
-	return dna as LandDNA;
 }

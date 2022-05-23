@@ -4,6 +4,7 @@ import {
 } from '@amxx/graphprotocol-utils'
 
 import {
+	LandTransfer,
 	WinzerTransfer,
 } from '../../generated/schema'
 
@@ -11,18 +12,18 @@ import {
 	Approval       as ApprovalEvent,
 	ApprovalForAll as ApprovalForAllEvent,
 	Transfer       as TransferEvent,
-} from '../../generated/Winzer/Winzer'
+} from '../../generated/Land/Land'
 
 import {
 	fetchAccount,
 } from '../fetch/account'
 
-import { fetchWinzer, fetchWinzerOperator, fetchWinzerToken } from '../fetch/winzer'
+import { fetchLand, fetchLandOperator, fetchLandToken } from '../fetch/land'
 
 export function handleTransfer(event: TransferEvent): void {
-	let contract = fetchWinzer(event.address)
+	let contract = fetchLand(event.address)
 	if (contract != null) {
-		let token = fetchWinzerToken(contract, event.params.tokenId)
+		let token = fetchLandToken(contract, event.params.tokenId)
 		let from  = fetchAccount(event.params.from)
 		let to    = fetchAccount(event.params.to)
 
@@ -31,7 +32,7 @@ export function handleTransfer(event: TransferEvent): void {
 		contract.save()
 		token.save()
 
-		let ev         = new WinzerTransfer(events.id(event))
+		let ev         = new LandTransfer(events.id(event))
 		ev.emitter     = contract.id
 		ev.transaction = transactions.log(event).id
 		ev.timestamp   = event.block.timestamp
@@ -44,9 +45,9 @@ export function handleTransfer(event: TransferEvent): void {
 }
 
 export function handleApproval(event: ApprovalEvent): void {
-	let contract = fetchWinzer(event.address)
+	let contract = fetchLand(event.address)
 	if (contract != null) {
-		let token    = fetchWinzerToken(contract, event.params.tokenId)
+		let token    = fetchLandToken(contract, event.params.tokenId)
 		let owner    = fetchAccount(event.params.owner)
 		let approved = fetchAccount(event.params.approved)
 
@@ -69,11 +70,11 @@ export function handleApproval(event: ApprovalEvent): void {
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-	let contract = fetchWinzer(event.address)
+	let contract = fetchLand(event.address)
 	if (contract != null) {
 		let owner      = fetchAccount(event.params.owner)
 		let operator   = fetchAccount(event.params.operator)
-		let delegation = fetchWinzerOperator(contract, owner, operator)
+		let delegation = fetchLandOperator(contract, owner, operator)
 
 		delegation.approved = event.params.approved
 

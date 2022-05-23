@@ -2,8 +2,12 @@
   "network": "mumbai",
   "contracts": {
     "WinzerERC721": {
-      "address": "0x929F194985E221C07cDE0902D74789E3637F8EA4",
-      "startBlock": 26317198
+      "address": "0x548c6476bBFeE5B99E4E26A371B4775d3184A69C",
+      "startBlock": 26436403
+    },
+    "LandERC721": {
+      "address": "0x8140aee3330143FE407aae7DE4A25F38D9b8F99a",
+      "startBlock": 26436409
     }
   }
 }
