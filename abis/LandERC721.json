@@ -1,6 +1,22 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_genesisReceiver",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_initBaseURI",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_initContractURI",
+        "type": "string"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -66,14 +82,14 @@
       {
         "components": [
           {
-            "internalType": "uint8",
+            "internalType": "int8",
             "name": "x",
-            "type": "uint8"
+            "type": "int8"
           },
           {
-            "internalType": "uint8",
+            "internalType": "int8",
             "name": "y",
-            "type": "uint8"
+            "type": "int8"
           },
           {
             "internalType": "uint8",
@@ -102,6 +118,11 @@
           },
           {
             "internalType": "uint8",
+            "name": "resource4",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
             "name": "resourceLevel1",
             "type": "uint8"
           },
@@ -114,15 +135,20 @@
             "internalType": "uint8",
             "name": "resourceLevel3",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "resourceLevel4",
+            "type": "uint8"
           }
         ],
         "indexed": false,
-        "internalType": "struct LandERC721.DNA",
-        "name": "_dna",
+        "internalType": "struct LandERC721.Properties",
+        "name": "_props",
         "type": "tuple"
       }
     ],
-    "name": "DnaUpdated",
+    "name": "PropertiesUpdated",
     "type": "event"
   },
   {
@@ -302,16 +328,29 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
-        "internalType": "uint8",
+        "internalType": "int8",
         "name": "",
-        "type": "uint8"
+        "type": "int8"
       },
       {
-        "internalType": "uint8",
+        "internalType": "int8",
         "name": "",
-        "type": "uint8"
+        "type": "int8"
       }
     ],
     "name": "coordinates",
@@ -328,14 +367,14 @@
   {
     "inputs": [
       {
-        "internalType": "uint8",
+        "internalType": "int8",
         "name": "",
-        "type": "uint8"
+        "type": "int8"
       },
       {
-        "internalType": "uint8",
+        "internalType": "int8",
         "name": "",
-        "type": "uint8"
+        "type": "int8"
       }
     ],
     "name": "coordinatesTaken",
@@ -344,70 +383,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "dna",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "x",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "y",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "climate",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "landType",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resource1",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resource2",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resource3",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resourceLevel1",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resourceLevel2",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resourceLevel3",
-        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -570,14 +545,14 @@
       {
         "components": [
           {
-            "internalType": "uint8",
+            "internalType": "int8",
             "name": "x",
-            "type": "uint8"
+            "type": "int8"
           },
           {
-            "internalType": "uint8",
+            "internalType": "int8",
             "name": "y",
-            "type": "uint8"
+            "type": "int8"
           },
           {
             "internalType": "uint8",
@@ -606,6 +581,11 @@
           },
           {
             "internalType": "uint8",
+            "name": "resource4",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
             "name": "resourceLevel1",
             "type": "uint8"
           },
@@ -618,10 +598,15 @@
             "internalType": "uint8",
             "name": "resourceLevel3",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "resourceLevel4",
+            "type": "uint8"
           }
         ],
-        "internalType": "struct LandERC721.DNA",
-        "name": "_dna",
+        "internalType": "struct LandERC721.Properties",
+        "name": "_properties",
         "type": "tuple"
       }
     ],
@@ -676,6 +661,80 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "properties",
+    "outputs": [
+      {
+        "internalType": "int8",
+        "name": "x",
+        "type": "int8"
+      },
+      {
+        "internalType": "int8",
+        "name": "y",
+        "type": "int8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "climate",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "landType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resource1",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resource2",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resource3",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resource4",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel1",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel2",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel3",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "resourceLevel4",
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -808,6 +867,19 @@
       }
     ],
     "name": "setBaseUri",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "setContractURI",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

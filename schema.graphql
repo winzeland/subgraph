@@ -159,15 +159,25 @@ type LandToken @entity {
 	owner: Account!
 	approval: Account!
 	uri: String
-	dna: LandDNA @derivedFrom(field: "token")
+	properties: LandProperties @derivedFrom(field: "token")
 	transfers: [LandTransfer!]! @derivedFrom(field: "token")
 }
 
-type LandDNA @entity {
+type LandProperties @entity {
 	id: ID!
 	token: LandToken!
 	x: Int!
 	y: Int!
+	climate: Int!
+	landType: Int!
+	resource1: Int!
+	resource2: Int!
+	resource3: Int!
+	resource4: Int!
+	resourceLevel1: Int!
+	resourceLevel2: Int!
+	resourceLevel3: Int!
+	resourceLevel4: Int!
 }
 
 type LandOperator @entity {
@@ -188,7 +198,6 @@ type LandTransfer implements Event @entity {
 	from: Account!
 	to: Account!
 }
-
 
 type ERC20Contract @entity {
 	id: ID!
