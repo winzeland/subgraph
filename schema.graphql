@@ -154,11 +154,14 @@ type LandContract @entity {
 
 type LandToken @entity {
 	id: ID!
-	contract: LandContract!
+	coordinates: String! @id
+	x: Int!
+	y: Int!
 	identifier: BigInt!
+	uri: String
 	owner: Account!
 	approval: Account!
-	uri: String
+	contract: LandContract!
 	properties: LandProperties @derivedFrom(field: "token")
 	transfers: [LandTransfer!]! @derivedFrom(field: "token")
 }

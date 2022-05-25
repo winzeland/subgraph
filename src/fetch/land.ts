@@ -105,6 +105,11 @@ export function fetchLandToken(contract: LandContract, identifier: BigInt): Land
 			properties.resourceLevel2 	= params.value9;
 			properties.resourceLevel3 	= params.value10;
 			properties.resourceLevel4 	= params.value11;
+
+			token.x = params.value0;
+			token.y = params.value1;
+			token.coordinates = `${params.value0};${params.value1}`;
+			token.save();
 		}
 
 		properties.save();
