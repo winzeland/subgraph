@@ -11,6 +11,8 @@ import {
 
 import {
 	ApprovalForAll as ApprovalForAllEvent,
+	AttributesUpdated,
+	MetadataUpdated,
 	TransferBatch  as TransferBatchEvent,
 	TransferSingle as TransferSingleEvent,
 	URI            as URIEvent,
@@ -155,5 +157,34 @@ export function handleURI(event: URIEvent): void
 	let contract = fetchResource(event.address)
 	let token    = fetchResourceToken(contract, event.params.id)
 	token.uri    = replaceURI(event.params.value, event.params.id)
+	token.save()
+}
+
+export function handleMetadataUpdated(event: MetadataUpdated): void
+{
+	let contract 	= fetchResource(event.address)
+	let token    	= fetchResourceToken(contract, event.params._id)
+	token.name 	 	= event.params._metadata.name;
+	token.type 	 	= event.params._metadata.typeId;
+	token.subtype 	= event.params._metadata.subtypeId;
+	token.save()
+}
+
+export function handleAttributesUpdated(event: AttributesUpdated): void
+{
+	let contract 	= fetchResource(event.address)
+	let token    	= fetchResourceToken(contract, event.params._id)
+	token.attr1type 	 	= event.params._attributes.attr1;
+	token.attr1value 	 	= event.params._attributes.value1;
+	token.attr2type 	 	= event.params._attributes.attr2;
+	token.attr2value 	 	= event.params._attributes.value2;
+	token.attr3type 	 	= event.params._attributes.attr3;
+	token.attr3value 	 	= event.params._attributes.value3;
+	token.attr4type 	 	= event.params._attributes.attr4;
+	token.attr4value 	 	= event.params._attributes.value4;
+	token.attr5type 	 	= event.params._attributes.attr5;
+	token.attr5value 	 	= event.params._attributes.value5;
+	token.attr6type 	 	= event.params._attributes.attr6;
+	token.attr6value 	 	= event.params._attributes.value6;
 	token.save()
 }

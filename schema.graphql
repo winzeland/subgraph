@@ -231,6 +231,21 @@ type ResourceToken @entity {
 	contract: ResourceContract!
 	identifier: BigInt!
 	uri: String
+	name: String!
+	type: BigInt!
+	subtype: BigInt!
+	attr1type: BigInt!
+	attr1value: BigInt!
+	attr2type: BigInt!
+	attr2value: BigInt!
+	attr3type: BigInt!
+	attr3value: BigInt!
+	attr4type: BigInt!
+	attr4value: BigInt!
+	attr5type: BigInt!
+	attr5value: BigInt!
+	attr6type: BigInt!
+	attr6value: BigInt!
 	totalSupply: ResourceBalance!
 	balances: [ResourceBalance!]! @derivedFrom(field: "token")
 	transfers: [ResourceTransfer!]! @derivedFrom(field: "token")

@@ -2,9 +2,6 @@
   "extends": "@graphprotocol/graph-ts",
   "compilerOptions": {
       "baseUrl": "./src",
-      "lib": [
-        "es2021"
-      ],
       "paths": {
           "generated/*": ["../generated"]
       }
