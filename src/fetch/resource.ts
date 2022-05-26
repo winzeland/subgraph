@@ -42,7 +42,7 @@ export function fetchResource(address: Address): ResourceContract {
 }
 
 export function fetchResourceToken(contract: ResourceContract, identifier: BigInt): ResourceToken {
-	let id = contract.id.concat('/').concat(identifier.toHex())
+	let id = identifier.toHex()
 	let token = ResourceToken.load(id)
 
 	if (token == null) {
@@ -77,7 +77,7 @@ export function fetchResourceBalance(token: ResourceToken, account: Account | nu
 }
 
 export function fetchResourceOperator(contract: ResourceContract, owner: Account, operator: Account): ResourceOperator {
-	let id = contract.id.concat('/').concat(owner.id).concat('/').concat(operator.id)
+	let id = owner.id.concat('/').concat(operator.id)
 	let op = ResourceOperator.load(id)
 
 	if (op == null) {
