@@ -18,6 +18,13 @@ type Account @entity {
 	landOperatorOperator: [LandOperator!]! @derivedFrom(field: "operator")
 	landTransferFromEvent: [LandTransfer!]! @derivedFrom(field: "from")
 	landTransferToEvent: [LandTransfer!]! @derivedFrom(field: "to")
+	asResource: ResourceContract
+	resourceBalances: [ResourceBalance!]! @derivedFrom(field: "account")
+	resourceOperatorOwner: [ResourceOperator!]! @derivedFrom(field: "owner")
+	resourceOperatorOperator: [ResourceOperator!]! @derivedFrom(field: "operator")
+	resourceTransferFromEvent: [ResourceTransfer!]! @derivedFrom(field: "from")
+	resourceTransferToEvent: [ResourceTransfer!]! @derivedFrom(field: "to")
+	resourceTransferOperatorEvent: [ResourceTransfer!]! @derivedFrom(field: "operator")
 }
 
 type GubbinsContract @entity {
@@ -66,6 +73,7 @@ type GubbinsApproval @entity {
 	valueExact: BigInt!
 }
 
+# WINZERS START
 type WinzerContract @entity {
 	id: ID!
 	asAccount: Account!
@@ -141,6 +149,10 @@ type WinzerTransfer implements Event @entity {
 	to: Account!
 }
 
+# WINZER END
+
+# LAND START
+
 type LandContract @entity {
 	id: ID!
 	asAccount: Account!
@@ -202,13 +214,63 @@ type LandTransfer implements Event @entity {
 	to: Account!
 }
 
-type ERC20Contract @entity {
+# LAND END
+
+# RESOURCES START
+
+type ResourceContract @entity {
 	id: ID!
 	asAccount: Account!
-	name: String
-	symbol: String
-	decimals: Int!
+	tokens: [ResourceToken!]! @derivedFrom(field: "contract")
+	balances: [ResourceBalance!]! @derivedFrom(field: "contract")
+	operators: [ResourceOperator!]! @derivedFrom(field: "contract")
+	transfers: [ResourceTransfer!]! @derivedFrom(field: "contract")
 }
+type ResourceToken @entity {
+	id: ID!
+	contract: ResourceContract!
+	identifier: BigInt!
+	uri: String
+	totalSupply: ResourceBalance!
+	balances: [ResourceBalance!]! @derivedFrom(field: "token")
+	transfers: [ResourceTransfer!]! @derivedFrom(field: "token")
+}
+type ResourceBalance @entity {
+	id: ID!
+	contract: ResourceContract!
+	token: ResourceToken!
+	account: Account
+	value: BigDecimal!
+	valueExact: BigInt!
+	transferFromEvent: [ResourceTransfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [ResourceTransfer!]! @derivedFrom(field: "toBalance")
+}
+type ResourceOperator @entity {
+	id: ID!
+	contract: ResourceContract!
+	owner: Account!
+	operator: Account!
+	approved: Boolean!
+}
+type ResourceTransfer implements Event @entity {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ResourceContract!
+	token: ResourceToken!
+	operator: Account!
+	from: Account
+	fromBalance: ResourceBalance
+	to: Account
+	toBalance: ResourceBalance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+
+# RESOURCES END
+
+# SHARED START
 
 interface Event {
 	id: ID!
@@ -223,6 +285,16 @@ type Transaction @entity {
 	blockNumber: BigInt!
 	events: [Event!]! @derivedFrom(field: "transaction")
 }
+
+type ERC20Contract @entity {
+	id: ID!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+}
+
+# SHARED END
 
 # type Account @entity {
 # 	id: ID!

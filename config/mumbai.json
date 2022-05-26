@@ -8,6 +8,10 @@
     "LandERC721": {
       "address": "0x8140aee3330143FE407aae7DE4A25F38D9b8F99a",
       "startBlock": 26436409
+    },
+    "ResourcesERC1155": {
+      "address": "0x1a31AE39488dA82c6693c812A9258fE6c549E87E",
+      "startBlock": 26472138
     }
   }
 }

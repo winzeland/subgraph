@@ -77,3 +77,30 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/datasources/land.ts
+
+  - kind: ethereum/contract
+    name: resource
+    network: {{network}}
+    source:
+      address: "{{contracts.ResourcesERC1155.address}}"
+      abi: Resource
+      startBlock: {{contracts.ResourcesERC1155.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Resource
+      abis:
+        - name: Resource
+          file: ./abis/ResourcesERC1155.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+      file: ./src/datasources/land.ts
