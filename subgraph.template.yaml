@@ -103,4 +103,4 @@ dataSources:
           handler: handleTransferSingle
         - event: URI(string,indexed uint256)
           handler: handleURI
-      file: ./src/datasources/land.ts
+      file: ./src/datasources/resource.ts
