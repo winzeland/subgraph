@@ -56,18 +56,18 @@ function registerTransfer(
 	ev.contract    = contract.id
 	ev.token       = token.id
 	ev.operator    = operator.id
-	ev.value       = decimals.toDecimals(value)
+	ev.value       = decimals.toDecimals(value, 0)
 	ev.valueExact  = value
 
 	if (from.id == constants.ADDRESS_ZERO) {
 		let totalSupply        = fetchResourceBalance(token, null)
 		totalSupply.valueExact = totalSupply.valueExact.plus(value)
-		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, 0)
 		totalSupply.save()
 	} else {
 		let balance            = fetchResourceBalance(token, from)
 		balance.valueExact     = balance.valueExact.minus(value)
-		balance.value          = decimals.toDecimals(balance.valueExact)
+		balance.value          = decimals.toDecimals(balance.valueExact, 0)
 		balance.save()
 
 		ev.from                = from.id
@@ -77,12 +77,12 @@ function registerTransfer(
 	if (to.id == constants.ADDRESS_ZERO) {
 		let totalSupply        = fetchResourceBalance(token, null)
 		totalSupply.valueExact = totalSupply.valueExact.minus(value)
-		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, 0)
 		totalSupply.save()
 	} else {
 		let balance            = fetchResourceBalance(token, to)
 		balance.valueExact     = balance.valueExact.plus(value)
-		balance.value          = decimals.toDecimals(balance.valueExact)
+		balance.value          = decimals.toDecimals(balance.valueExact, 0)
 		balance.save()
 
 		ev.to                  = to.id

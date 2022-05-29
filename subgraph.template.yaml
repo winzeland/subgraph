@@ -103,7 +103,7 @@ dataSources:
           handler: handleTransferSingle
         - event: MetadataUpdated(indexed uint256,(string,uint8,uint8))
           handler: handleMetadataUpdated
-        - event: AttributesUpdated(indexed uint256,(uint8,int8,uint8,int8,uint8,int8,uint8,int8,uint8,int8))
+        - event: AttributesUpdated(indexed uint256,(uint8,int8,uint8,int8,uint8,int8,uint8,int8,uint8,int8,uint8,int8))
           handler: handleAttributesUpdated
         - event: URI(string,indexed uint256)
           handler: handleURI
