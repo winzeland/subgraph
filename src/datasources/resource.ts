@@ -5,16 +5,18 @@ import {
 
 import {
 	Account,
-	ERC1155Contract,
-	ERC1155Transfer,
+	ResourceContract,
+	ResourceTransfer,
 } from '../../generated/schema'
 
 import {
 	ApprovalForAll as ApprovalForAllEvent,
+	AttributesUpdated,
+	MetadataUpdated,
 	TransferBatch  as TransferBatchEvent,
 	TransferSingle as TransferSingleEvent,
 	URI            as URIEvent,
-} from '../../generated/erc1155/IERC1155'
+} from '../../generated/resource/Resource'
 
 import {
 	constants,
@@ -28,17 +30,17 @@ import {
 } from '../fetch/account'
 
 import {
-	fetchERC1155,
-	fetchERC1155Token,
-	fetchERC1155Balance,
-	fetchERC721Operator,
+	fetchResource,
+	fetchResourceToken,
+	fetchResourceBalance,
+	fetchResourceOperator,
 	replaceURI,
-} from '../fetch/erc1155'
+} from '../fetch/resource'
 
 function registerTransfer(
 	event:    ethereum.Event,
 	suffix:   string,
-	contract: ERC1155Contract,
+	contract: ResourceContract,
 	operator: Account,
 	from:     Account,
 	to:       Account,
@@ -46,26 +48,26 @@ function registerTransfer(
 	value:    BigInt)
 : void
 {
-	let token      = fetchERC1155Token(contract, id)
-	let ev         = new ERC1155Transfer(events.id(event).concat(suffix))
+	let token      = fetchResourceToken(contract, id)
+	let ev         = new ResourceTransfer(events.id(event).concat(suffix))
 	ev.emitter     = token.id
 	ev.transaction = transactions.log(event).id
 	ev.timestamp   = event.block.timestamp
 	ev.contract    = contract.id
 	ev.token       = token.id
 	ev.operator    = operator.id
-	ev.value       = decimals.toDecimals(value)
+	ev.value       = decimals.toDecimals(value, 0)
 	ev.valueExact  = value
 
 	if (from.id == constants.ADDRESS_ZERO) {
-		let totalSupply        = fetchERC1155Balance(token, null)
+		let totalSupply        = fetchResourceBalance(token, null)
 		totalSupply.valueExact = totalSupply.valueExact.plus(value)
-		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, 0)
 		totalSupply.save()
 	} else {
-		let balance            = fetchERC1155Balance(token, from)
+		let balance            = fetchResourceBalance(token, from)
 		balance.valueExact     = balance.valueExact.minus(value)
-		balance.value          = decimals.toDecimals(balance.valueExact)
+		balance.value          = decimals.toDecimals(balance.valueExact, 0)
 		balance.save()
 
 		ev.from                = from.id
@@ -73,14 +75,14 @@ function registerTransfer(
 	}
 
 	if (to.id == constants.ADDRESS_ZERO) {
-		let totalSupply        = fetchERC1155Balance(token, null)
+		let totalSupply        = fetchResourceBalance(token, null)
 		totalSupply.valueExact = totalSupply.valueExact.minus(value)
-		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, 0)
 		totalSupply.save()
 	} else {
-		let balance            = fetchERC1155Balance(token, to)
+		let balance            = fetchResourceBalance(token, to)
 		balance.valueExact     = balance.valueExact.plus(value)
-		balance.value          = decimals.toDecimals(balance.valueExact)
+		balance.value          = decimals.toDecimals(balance.valueExact, 0)
 		balance.save()
 
 		ev.to                  = to.id
@@ -93,7 +95,7 @@ function registerTransfer(
 
 export function handleTransferSingle(event: TransferSingleEvent): void
 {
-	let contract = fetchERC1155(event.address)
+	let contract = fetchResource(event.address)
 	let operator = fetchAccount(event.params.operator)
 	let from     = fetchAccount(event.params.from)
 	let to       = fetchAccount(event.params.to)
@@ -112,7 +114,7 @@ export function handleTransferSingle(event: TransferSingleEvent): void
 
 export function handleTransferBatch(event: TransferBatchEvent): void
 {
-	let contract = fetchERC1155(event.address)
+	let contract = fetchResource(event.address)
 	let operator = fetchAccount(event.params.operator)
 	let from     = fetchAccount(event.params.from)
 	let to       = fetchAccount(event.params.to)
@@ -142,18 +144,47 @@ export function handleTransferBatch(event: TransferBatchEvent): void
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-	let contract         = fetchERC1155(event.address)
+	let contract         = fetchResource(event.address)
 	let owner            = fetchAccount(event.params.account)
 	let operator         = fetchAccount(event.params.operator)
-	let delegation       = fetchERC721Operator(contract, owner, operator)
+	let delegation       = fetchResourceOperator(contract, owner, operator)
 	delegation.approved  = event.params.approved
 	delegation.save()
 }
 
 export function handleURI(event: URIEvent): void
 {
-	let contract = fetchERC1155(event.address)
-	let token    = fetchERC1155Token(contract, event.params.id)
+	let contract = fetchResource(event.address)
+	let token    = fetchResourceToken(contract, event.params.id)
 	token.uri    = replaceURI(event.params.value, event.params.id)
+	token.save()
+}
+
+export function handleMetadataUpdated(event: MetadataUpdated): void
+{
+	let contract 	= fetchResource(event.address)
+	let token    	= fetchResourceToken(contract, event.params._id)
+	token.name 	 	= event.params._metadata.name;
+	token.type 	 	= event.params._metadata.typeId;
+	token.subtype 	= event.params._metadata.subtypeId;
+	token.save()
+}
+
+export function handleAttributesUpdated(event: AttributesUpdated): void
+{
+	let contract 	= fetchResource(event.address)
+	let token    	= fetchResourceToken(contract, event.params._id)
+	token.attr1type 	 	= event.params._attributes.attr1;
+	token.attr1value 	 	= event.params._attributes.value1;
+	token.attr2type 	 	= event.params._attributes.attr2;
+	token.attr2value 	 	= event.params._attributes.value2;
+	token.attr3type 	 	= event.params._attributes.attr3;
+	token.attr3value 	 	= event.params._attributes.value3;
+	token.attr4type 	 	= event.params._attributes.attr4;
+	token.attr4value 	 	= event.params._attributes.value4;
+	token.attr5type 	 	= event.params._attributes.attr5;
+	token.attr5value 	 	= event.params._attributes.value5;
+	token.attr6type 	 	= event.params._attributes.attr6;
+	token.attr6value 	 	= event.params._attributes.value6;
 	token.save()
 }

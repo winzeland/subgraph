@@ -5,15 +5,15 @@ import {
 
 import {
 	Account,
-	ERC1155Contract,
-	ERC1155Token,
-	ERC1155Balance,
-	ERC1155Operator,
+	ResourceContract,
+	ResourceToken,
+	ResourceBalance,
+	ResourceOperator,
 } from '../../generated/schema'
 
 import {
-	IERC1155,
-} from '../../generated/erc1155/IERC1155'
+	Resource,
+} from '../../generated/resource/Resource'
 
 import {
 	constants,
@@ -30,41 +30,41 @@ export function replaceURI(uri: string, identifier: BigInt): string {
 	)
 }
 
-export function fetchERC1155(address: Address): ERC1155Contract {
+export function fetchResource(address: Address): ResourceContract {
 	let account        = fetchAccount(address)
-	let contract       = new ERC1155Contract(account.id)
+	let contract       = new ResourceContract(account.id)
 	contract.asAccount = account.id
-	account.asERC1155  = contract.id
+	account.asResource  = contract.id
 	contract.save()
 	account.save()
 
 	return contract
 }
 
-export function fetchERC1155Token(contract: ERC1155Contract, identifier: BigInt): ERC1155Token {
-	let id = contract.id.concat('/').concat(identifier.toHex())
-	let token = ERC1155Token.load(id)
+export function fetchResourceToken(contract: ResourceContract, identifier: BigInt): ResourceToken {
+	let id = identifier.toHex()
+	let token = ResourceToken.load(id)
 
 	if (token == null) {
-		let erc1155            = IERC1155.bind(Address.fromString(contract.id))
+		let erc1155            = Resource.bind(Address.fromString(contract.id))
 		let try_uri            = erc1155.try_uri(identifier)
-		token                  = new ERC1155Token(id)
+		token                  = new ResourceToken(id)
 		token.contract         = contract.id
 		token.identifier       = identifier
-		token.totalSupply      = fetchERC1155Balance(token as ERC1155Token, null).id
+		token.totalSupply      = fetchResourceBalance(token as ResourceToken, null).id
 		token.uri              = try_uri.reverted ? null : replaceURI(try_uri.value, identifier)
 		token.save()
 	}
 
-	return token as ERC1155Token
+	return token as ResourceToken
 }
 
-export function fetchERC1155Balance(token: ERC1155Token, account: Account | null): ERC1155Balance {
+export function fetchResourceBalance(token: ResourceToken, account: Account | null): ResourceBalance {
 	let id = token.id.concat('/').concat(account ? account.id : 'totalSupply')
-	let balance = ERC1155Balance.load(id)
+	let balance = ResourceBalance.load(id)
 
 	if (balance == null) {
-		balance            = new ERC1155Balance(id)
+		balance            = new ResourceBalance(id)
 		balance.contract   = token.contract
 		balance.token      = token.id
 		balance.account    = account ? account.id : null
@@ -73,19 +73,19 @@ export function fetchERC1155Balance(token: ERC1155Token, account: Account | null
 		balance.save()
 	}
 
-	return balance as ERC1155Balance
+	return balance as ResourceBalance
 }
 
-export function fetchERC721Operator(contract: ERC1155Contract, owner: Account, operator: Account): ERC1155Operator {
-	let id = contract.id.concat('/').concat(owner.id).concat('/').concat(operator.id)
-	let op = ERC1155Operator.load(id)
+export function fetchResourceOperator(contract: ResourceContract, owner: Account, operator: Account): ResourceOperator {
+	let id = owner.id.concat('/').concat(operator.id)
+	let op = ResourceOperator.load(id)
 
 	if (op == null) {
-		op          = new ERC1155Operator(id)
+		op          = new ResourceOperator(id)
 		op.contract = contract.id
 		op.owner    = owner.id
 		op.operator = operator.id
 	}
 
-	return op as ERC1155Operator
+	return op as ResourceOperator
 }
